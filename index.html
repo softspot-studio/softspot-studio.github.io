@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soft Spot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Jost:wght@400;500;600&family=Caveat:wght@500;600&family=Noto+Serif+SC:wght@600&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Layout idea: a sunny storybook shopfront — sky-and-hills hero, striped awning dividers, colour-blocked product tiles, pill accordions, a big red footer sign. */
+  --paper: #FBF1E3;
+  --cream: #FFF9F0;
+  --ink: #4A2722;
+  --red: #CF4636;
+  --pink: #F6B9C3;
+  --blue: #A8CBE2;
+  --yellow: #F9D878;
+  --green: #B4D083;
+  --font-display: "Fraunces", "Noto Serif SC", Georgia, serif;
+  --font-body: "Jost", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-hand: "Caveat", "Noto Sans SC", cursive;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ticker-track { animation: none !important; }
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+}
+html[lang="zh"] body { font-size: 16px; line-height: 1.75; }
+img, svg { max-width: 100%; }
+a { color: var(--red); }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 8px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.08; margin: 0; text-wrap: balance; color: var(--red); }
+h2 { font-size: clamp(2.1rem, 5vw, 3.2rem); font-style: italic; letter-spacing: -.01em; }
+h3 { font-size: 1.3rem; }
+html[lang="zh"] h1, html[lang="zh"] h2 { font-style: normal; letter-spacing: .02em; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.hand { font-family: var(--font-hand); font-size: 1.5rem; color: var(--ink); line-height: 1.1; }
+
+/* Ticker */
+.ticker { background: var(--red); color: var(--cream); overflow: hidden; font-size: .82rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+.ticker-track { display: flex; width: max-content; animation: scroll 38s linear infinite; }
+.ticker-track span { padding: 9px 22px; white-space: nowrap; display: inline-flex; align-items: center; gap: 22px; }
+.ticker-track span::after { content: ""; width: 9px; height: 9px; background: var(--yellow); border-radius: 50%; }
+@keyframes scroll { to { transform: translateX(-50%); } }
+
+/* Nav */
+.top { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 16px 0; }
+.logo { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 600; font-size: 1.9rem; color: var(--red); text-decoration: none; letter-spacing: -.01em; }
+.pillnav { display: flex; background: var(--pink); border-radius: 999px; padding: 4px; gap: 2px; }
+.pillnav a { color: var(--ink); text-decoration: none; font-size: .9rem; font-weight: 500; padding: 6px 16px; border-radius: 999px; white-space: nowrap; }
+.pillnav a:hover { background: rgba(255,255,255,.55); }
+.pillnav a.active { background: var(--red); color: var(--cream); }
+.top-right { display: flex; justify-content: flex-end; gap: 8px; }
+.lang { display: inline-flex; align-items: center; gap: 6px; font: 500 .9rem var(--font-body); color: var(--red); background: var(--cream); border: 1.5px solid var(--red); border-radius: 999px; padding: 6px 14px 6px 10px; cursor: pointer; }
+.lang svg { width: 18px; height: 18px; }
+.lang:hover { background: var(--pink); }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; font: 500 1rem var(--font-body); padding: 11px 24px; border-radius: 999px; text-decoration: none; cursor: pointer; border: 1.5px solid var(--red); transition: background .15s, color .15s; }
+.btn.solid { background: var(--red); color: var(--cream); }
+.btn.solid:hover { background: #B73A2C; }
+.btn.line { background: var(--cream); color: var(--red); }
+.btn.line:hover { background: var(--pink); }
+.btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* Hero */
+.hero { background: var(--blue); position: relative; }
+.hero::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 22px;
+  background: radial-gradient(circle at 22px 0, var(--paper) 21px, transparent 22px) repeat-x; background-size: 44px 22px; }
+.hero-copy { text-align: center; padding: 76px 20px 8px; position: relative; z-index: 1; }
+.hero h1 { font-size: clamp(2.6rem, 7.4vw, 5.2rem); font-style: italic; color: var(--ink); max-width: 15ch; margin: 0 auto; }
+html[lang="zh"] .hero h1 { font-style: normal; font-size: clamp(2.1rem, 5.6vw, 3.8rem); max-width: 16em; }
+.hero h1 em { color: var(--red); }
+.hero p.lede { max-width: 46ch; margin: 18px auto 26px; font-size: 1.1rem; }
+.hero .btns { justify-content: center; }
+.cloud { position: absolute; z-index: 0; }
+.scene { display: block; width: 100%; height: clamp(200px, 27vw, 330px); margin-top: -10px; }
+
+/* Awning */
+.awning { height: 46px; background: repeating-linear-gradient(90deg, var(--red) 0 34px, var(--cream) 34px 68px); position: relative; border-top: 2px solid var(--ink); }
+.awning::after { content: ""; position: absolute; left: 0; right: 0; bottom: -17px; height: 18px;
+  background: radial-gradient(circle at 17px 0, var(--red) 16px, transparent 17px) 0 0 / 68px 18px repeat-x,
+              radial-gradient(circle at 17px 0, var(--cream) 16px, transparent 17px) 34px 0 / 68px 18px repeat-x; }
+
+section { padding: 76px 0; }
+.head { margin-bottom: 30px; max-width: 620px; }
+.head p { margin: 12px 0 0; }
+
+/* Products */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.card { display: flex; flex-direction: column; gap: 0; background: var(--cream); border-radius: 22px; overflow: hidden; }
+.tile { aspect-ratio: 5 / 4; display: grid; place-items: center; position: relative; }
+.tile svg { width: 46%; height: auto; }
+.chip { position: absolute; top: 14px; left: 14px; font-size: .78rem; font-weight: 500; padding: 3px 12px; border-radius: 999px; background: var(--cream); color: var(--ink); }
+.chip.hot { background: var(--yellow); }
+.card-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.card-title { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.card-title h3 { font-size: 1.25rem; color: var(--ink); }
+.price { font-family: var(--font-display); font-size: 1.1rem; color: var(--red); white-space: nowrap; }
+.card p { margin: 0; font-size: .95rem; }
+.fine { font-size: .88rem; opacity: .85; margin-top: 18px; }
+
+/* Fur */
+.fur-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.collage { position: relative; aspect-ratio: 1 / .9; }
+.collage svg.main { width: 100%; height: 100%; }
+.label { position: absolute; font-family: var(--font-hand); font-size: 1.55rem; color: var(--ink); white-space: nowrap; }
+.acc { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+details { border-radius: 16px; background: var(--pink); }
+details:nth-child(2) { background: var(--blue); }
+details:nth-child(3) { background: var(--yellow); }
+details:nth-child(4) { background: var(--green); }
+summary { list-style: none; cursor: pointer; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; width: 24px; height: 24px; border-radius: 50%; background: var(--red); color: var(--cream); display: grid; place-items: center; font: 500 1.1rem/1 var(--font-body); flex: none; }
+details[open] summary::after { content: "–"; }
+details p { margin: 0; padding: 0 18px 16px; font-size: .97rem; }
+
+/* Gift */
+.gift { background: var(--yellow); border-radius: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 28px; align-items: stretch; }
+.gift-copy { padding: 18px 10px 10px 14px; display: flex; flex-direction: column; gap: 14px; }
+.gift-copy p { margin: 0; max-width: 42ch; }
+.gift-copy .btns { margin-top: auto; }
+.gift-art { background: var(--cream); border-radius: 20px; display: grid; place-items: center; padding: 20px; }
+.gift-art svg { width: min(360px, 100%); }
+
+/* Steps + Order */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 30px; }
+.step { border-top: 1.5px solid var(--red); padding-top: 12px; }
+.step b { font-family: var(--font-display); font-style: italic; color: var(--red); font-size: 1.6rem; font-weight: 600; display: block; line-height: 1; margin-bottom: 6px; }
+.step h3 { font-size: 1.1rem; color: var(--ink); margin-bottom: 4px; }
+.step p { margin: 0; font-size: .93rem; }
+.order { display: grid; grid-template-columns: 1.1fr .9fr; gap: 22px; align-items: start; }
+.panel { background: var(--cream); border-radius: 22px; padding: 24px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field label { font-weight: 500; font-size: .92rem; }
+.field input, .field select, .field textarea { font: inherit; font-size: 1rem; padding: 10px 14px; border: 1.5px solid #E6CFC4; border-radius: 12px; background: var(--paper); color: var(--ink); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--red); outline: none; }
+.field textarea { min-height: 84px; resize: vertical; }
+.check { display: flex; gap: 10px; align-items: center; font-weight: 500; font-size: .95rem; margin: 2px 0 16px; }
+.check input { width: 19px; height: 19px; accent-color: var(--red); }
+.preview { white-space: pre-wrap; background: var(--paper); border-radius: 14px; padding: 16px; min-height: 200px; font-size: .95rem; border: 1.5px dashed #E1BFB2; }
+.status { font-weight: 500; color: var(--red); min-height: 1.6em; margin-top: 10px; font-size: .95rem; }
+.hidden { display: none !important; }
+.ig-soon { font-size: .85rem; align-self: center; padding: 6px 14px; border-radius: 999px; background: var(--pink); }
+
+/* Market + about */
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.ticket { background: var(--cream); border-radius: 22px; overflow: hidden; }
+.ticket .stripe { height: 30px; background: repeating-linear-gradient(90deg, var(--blue) 0 22px, var(--cream) 22px 44px); }
+.ticket .stripe.red { background: repeating-linear-gradient(90deg, var(--pink) 0 22px, var(--cream) 22px 44px); }
+.ticket .in { padding: 22px 24px 26px; }
+.ticket dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; margin: 12px 0 0; }
+.ticket dt { font-weight: 600; }
+.ticket dd { margin: 0; }
+.ticket p { margin: 12px 0 0; }
+
+/* Footer */
+.foot { background: var(--red); color: var(--cream); border-radius: 28px; padding: 40px 36px 26px; margin: 0 20px 28px; }
+.foot-grid { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 28px; align-items: start; }
+.foot .word { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 600; font-size: clamp(3rem, 8vw, 5.6rem); line-height: .9; letter-spacing: -.02em; }
+.foot h4 { margin: 0 0 8px; font-family: var(--font-display); font-weight: 600; font-size: 1rem; }
+.foot ul { list-style: none; padding: 0; margin: 0; font-size: .92rem; display: grid; gap: 4px; }
+.foot a { color: var(--cream); text-decoration: none; opacity: .9; }
+.foot a:hover { opacity: 1; text-decoration: underline; }
+.foot-bottom { border-top: 1px solid rgba(255,249,240,.4); margin-top: 34px; padding-top: 14px; display: flex; justify-content: space-between; font-size: .8rem; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .top { grid-template-columns: 1fr auto; }
+  .pillnav { grid-column: 1 / -1; grid-row: 2; justify-self: center; overflow-x: auto; max-width: 100%; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .fur-grid, .gift, .order, .duo { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .foot-grid > :first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 540px) {
+  .grid, .row2 { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .pillnav a { padding: 6px 11px; font-size: .85rem; }
+  .hero-copy { padding-top: 60px; }
+  .foot { margin: 0 12px 20px; padding: 32px 22px 22px; }
+  .label { font-size: 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="ging" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#FFF9F0"/>
+      <rect width="6" height="12" fill="#CF4636" opacity=".5"/>
+      <rect width="12" height="6" fill="#CF4636" opacity=".5"/>
+    </pattern>
+    <pattern id="ging-b" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#FFF9F0"/>
+      <rect width="5" height="10" fill="#7FB0D3" opacity=".6"/>
+      <rect width="10" height="5" fill="#7FB0D3" opacity=".6"/>
+    </pattern>
+  </defs>
+</svg>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span data-i18n="tick1">Christmas pre-orders now open</span><span data-i18n="tick2">Made to order in Melbourne</span><span data-i18n="tick3">Bring a little of their fur</span><span data-i18n="tick4">Dogs, cats and every size in between</span>
+    <span data-i18n="tick1">Christmas pre-orders now open</span><span data-i18n="tick2">Made to order in Melbourne</span><span data-i18n="tick3">Bring a little of their fur</span><span data-i18n="tick4">Dogs, cats and every size in between</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="top" id="top">
+    <a class="logo" href="#top">Soft Spot</a>
+    <nav class="pillnav" aria-label="Main">
+      <a href="#make" class="active" data-i18n="nav.make">What we make</a>
+      <a href="#fur" data-i18n="nav.fur">Their fur</a>
+      <a href="#order" data-i18n="nav.order">Order</a>
+      <a href="#market" data-i18n="nav.market">Find us</a>
+    </nav>
+    <div class="top-right">
+      <button class="lang" id="langBtn" type="button" aria-label="Switch language / 切换语言">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z"/></svg>
+        <span id="langLabel">中文</span>
+      </button>
+    </div>
+  </header>
+</div>
+
+<div class="hero">
+  <svg class="cloud" style="left:6%; top:58px; width:150px;" viewBox="0 0 150 60" aria-hidden="true"><path d="M20 50 c-18 0 -18 -24 0 -24 c2 -16 26 -20 34 -6 c8 -16 38 -12 38 8 c18 -4 30 22 8 22z" fill="#FFF9F0"/></svg>
+  <svg class="cloud" style="right:7%; top:120px; width:190px;" viewBox="0 0 150 60" aria-hidden="true"><path d="M20 50 c-18 0 -18 -24 0 -24 c2 -16 26 -20 34 -6 c8 -16 38 -12 38 8 c18 -4 30 22 8 22z" fill="#FFF9F0"/></svg>
+  <svg class="cloud" style="left:18%; top:250px; width:110px;" viewBox="0 0 150 60" aria-hidden="true"><path d="M20 50 c-18 0 -18 -24 0 -24 c2 -16 26 -20 34 -6 c8 -16 38 -12 38 8 c18 -4 30 22 8 22z" fill="#FFF9F0"/></svg>
+  <div class="hero-copy">
+    <h1 data-i18n-html="hero.title">Little things, made with a bit of <em>them.</em></h1>
+    <p class="lede" data-i18n="hero.lede">Felted, drawn and stitched by hand in Melbourne, from your pet's photos and a little of their fur.</p>
+    <div class="btns">
+      <a class="btn solid" href="#order" data-i18n="hero.cta1">Start a custom order</a>
+      <a class="btn line" href="#market" data-i18n="hero.cta2">Find us at the market</a>
+    </div>
+  </div>
+  <svg class="scene" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" role="img" aria-label="A shiba puppy in a red gingham bandana and a white kitten with a blue collar sitting on green hills">
+  <defs>
+    <pattern id="ging-s" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#FFF9F0"/>
+      <rect width="5" height="10" fill="#CF4636" opacity=".5"/>
+      <rect width="10" height="5" fill="#CF4636" opacity=".5"/>
+    </pattern>
+    <radialGradient id="hillHi" cx=".5" cy="0" r=".9">
+      <stop offset="0" stop-color="#D6EAB0"/>
+      <stop offset="1" stop-color="#B6D489"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- back hill + little stall -->
+  <path d="M0 150 C150 84 300 96 430 138 C560 180 650 102 810 110 C960 118 1060 166 1200 128 V300 H0Z" fill="#CFE3A6" stroke="#5A3328" stroke-width="2.5"/>
+  <g stroke="#5A3328" stroke-width="2.2" stroke-linejoin="round">
+    <rect x="300" y="96" width="46" height="30" fill="#FFF9F0"/>
+    <path d="M294 96 h58 l-4 -14 h-50z" fill="#CF4636"/>
+    <path d="M304 82 v14 M314 82 v14 M324 82 v14 M334 82 v14 M344 82 v14" stroke="#FFF9F0" stroke-width="4"/>
+    <path d="M294 96 h58 l-4 -14 h-50z" fill="none"/>
+    <path d="M298 126 v8 M348 126 v8"/>
+  </g>
+  <!-- tree -->
+  <g stroke="#5A3328" stroke-width="2.5" stroke-linejoin="round">
+    <rect x="1054" y="118" width="12" height="44" rx="3" fill="#C98E52"/>
+    <path d="M1060 50 c26 0 40 18 36 38 c14 10 6 36 -14 36 h-44 c-20 0 -28 -26 -14 -36 c-4 -20 10 -38 36 -38z" fill="#8FC06D"/>
+  </g>
+  <g fill="#F6B9C3"><circle cx="1046" cy="78" r="4"/><circle cx="1074" cy="70" r="4"/><circle cx="1080" cy="100" r="4"/><circle cx="1040" cy="104" r="4"/></g>
+  <!-- front hill -->
+  <path d="M0 226 C200 178 380 192 560 232 C740 272 910 196 1200 214 V300 H0Z" fill="url(#hillHi)" stroke="#5A3328" stroke-width="2.5"/>
+  <!-- flowers -->
+  <g stroke="#5A3328" stroke-width="1.8">
+    <g transform="translate(110 236)"><circle r="5" cx="0" cy="-6" fill="#FFF9F0"/><circle r="5" cx="6" cy="0" fill="#FFF9F0"/><circle r="5" cx="0" cy="6" fill="#FFF9F0"/><circle r="5" cx="-6" cy="0" fill="#FFF9F0"/><circle r="3.5" fill="#F9D878"/></g>
+    <g transform="translate(150 252)"><circle r="4" cx="0" cy="-5" fill="#F6B9C3"/><circle r="4" cx="5" cy="0" fill="#F6B9C3"/><circle r="4" cx="0" cy="5" fill="#F6B9C3"/><circle r="4" cx="-5" cy="0" fill="#F6B9C3"/><circle r="3" fill="#F9D878"/></g>
+    <g transform="translate(880 246)"><circle r="5" cx="0" cy="-6" fill="#FFF9F0"/><circle r="5" cx="6" cy="0" fill="#FFF9F0"/><circle r="5" cx="0" cy="6" fill="#FFF9F0"/><circle r="5" cx="-6" cy="0" fill="#FFF9F0"/><circle r="3.5" fill="#F9D878"/></g>
+    <g transform="translate(930 230)"><circle r="4" cx="0" cy="-5" fill="#F6B9C3"/><circle r="4" cx="5" cy="0" fill="#F6B9C3"/><circle r="4" cx="0" cy="5" fill="#F6B9C3"/><circle r="4" cx="-5" cy="0" fill="#F6B9C3"/><circle r="3" fill="#F9D878"/></g>
+    <g transform="translate(1110 250)"><circle r="5" cx="0" cy="-6" fill="#FFF9F0"/><circle r="5" cx="6" cy="0" fill="#FFF9F0"/><circle r="5" cx="0" cy="6" fill="#FFF9F0"/><circle r="5" cx="-6" cy="0" fill="#FFF9F0"/><circle r="3.5" fill="#F9D878"/></g>
+  </g>
+  <g stroke="#5A3328" stroke-width="2.2" stroke-linecap="round" fill="none">
+    <path d="M60 246 l-3 -10 M66 245 l2 -11 M1000 232 l-3 -10 M1007 231 l2 -10 M800 262 l-3 -10 M807 261 l2 -10"/>
+  </g>
+  <!-- mushrooms -->
+  <g stroke="#5A3328" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M208 228 c0 -10 2 -18 8 -18 c6 0 8 8 8 18z" fill="#FFF9F0"/>
+    <path d="M192 212 C190 186 242 184 240 212 C232 218 200 218 192 212z" fill="#CF4636"/>
+    <path d="M252 230 c0 -8 2 -12 5 -12 c3 0 5 4 5 12z" fill="#FFF9F0"/>
+    <path d="M242 220 C240 202 274 202 272 220 C266 224 248 224 242 220z" fill="#CF4636"/>
+  </g>
+  <g fill="#FFF9F0"><ellipse cx="206" cy="199" rx="4.5" ry="3.5"/><ellipse cx="223" cy="194" rx="4" ry="3"/><ellipse cx="233" cy="204" rx="3" ry="2.5"/><circle cx="257" cy="209" r="2.6"/><circle cx="265" cy="214" r="2"/></g>
+
+  <!-- yarn ball -->
+  <g stroke="#5A3328" stroke-width="2.5" stroke-linecap="round">
+    <circle cx="408" cy="236" r="21" fill="#F6B9C3"/>
+    <path d="M391 226 q17 -8 34 6 M389 239 q19 -10 38 4 M395 252 q13 -6 26 -2" fill="none" stroke="#E58D9C"/>
+    <path d="M428 246 q24 14 48 0 q12 -6 22 2" fill="none" stroke="#E58D9C" stroke-width="3"/>
+  </g>
+
+  <!-- PUPPY -->
+  <g transform="translate(470 58)" stroke="#5A3328" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M144 168 C188 160 196 118 172 108 C152 100 146 124 162 126" fill="#EFAE66"/>
+    <path d="M58 206 C48 160 68 128 100 128 C132 128 152 160 142 206 Z" fill="#EFAE66"/>
+    <path d="M80 206 C78 172 88 150 100 150 C112 150 122 172 120 206 Z" fill="#FFF3E0" stroke="none"/>
+    <path d="M56 138 Q100 158 144 138 L100 184 Z" fill="url(#ging-s)"/>
+    <ellipse cx="82" cy="204" rx="15" ry="9" fill="#FFF3E0"/>
+    <ellipse cx="118" cy="204" rx="15" ry="9" fill="#FFF3E0"/>
+    <path d="M78 202 v5 M86 202 v5 M114 202 v5 M122 202 v5" stroke-width="2"/>
+    <path d="M44 52 L38 8 C54 6 74 22 80 34 Z" fill="#EFAE66"/>
+    <path d="M156 52 L162 8 C146 6 126 22 120 34 Z" fill="#EFAE66"/>
+    <path d="M48 40 L46 18 C55 20 64 28 68 34 Z" fill="#F6B9C3" stroke="none"/>
+    <path d="M152 40 L154 18 C145 20 136 28 132 34 Z" fill="#F6B9C3" stroke="none"/>
+    <path d="M26 86 C26 38 58 22 100 22 C142 22 174 38 174 86 C174 126 142 142 100 142 C58 142 26 126 26 86Z" fill="#EFAE66"/>
+    <path d="M50 102 C50 78 74 74 100 88 C126 74 150 78 150 102 C150 128 126 139 100 139 C74 139 50 128 50 102Z" fill="#FFF3E0" stroke="none"/>
+    <ellipse cx="72" cy="62" rx="7" ry="4.5" fill="#FFF3E0" stroke="none"/>
+    <ellipse cx="128" cy="62" rx="7" ry="4.5" fill="#FFF3E0" stroke="none"/>
+    <ellipse cx="72" cy="88" rx="7" ry="9" fill="#3B2420" stroke="none"/>
+    <ellipse cx="128" cy="88" rx="7" ry="9" fill="#3B2420" stroke="none"/>
+    <circle cx="74.5" cy="84.5" r="2.8" fill="#fff" stroke="none"/>
+    <circle cx="130.5" cy="84.5" r="2.8" fill="#fff" stroke="none"/>
+    <path d="M92 100 Q100 95 108 100 Q105 108 100 108 Q95 108 92 100Z" fill="#3B2420" stroke="none"/>
+    <path d="M100 108 v3 M91 112 q4.5 5 9 0 q4.5 5 9 0" fill="none" stroke-width="2.6"/>
+    <ellipse cx="58" cy="106" rx="10" ry="6" fill="#F59A8C" opacity=".55" stroke="none"/>
+    <ellipse cx="142" cy="106" rx="10" ry="6" fill="#F59A8C" opacity=".55" stroke="none"/>
+  </g>
+
+  <!-- KITTY -->
+  <g transform="translate(660 92)" stroke="#5A3328" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M122 168 C166 166 172 124 152 110" fill="none" stroke="#5A3328" stroke-width="17"/>
+    <path d="M122 168 C166 166 172 124 152 110" fill="none" stroke="#FFFDF8" stroke-width="11"/>
+    <path d="M150 112 C160 104 168 114 160 120" fill="none" stroke="#B9B2AC" stroke-width="11"/>
+    <path d="M40 176 C30 134 50 104 85 104 C120 104 140 134 130 176 Z" fill="#FFFDF8"/>
+    <path d="M38 54 L34 12 L72 32 Z" fill="#FFFDF8"/>
+    <path d="M132 54 L136 12 L98 32 Z" fill="#B9B2AC"/>
+    <path d="M42 44 L40 22 L60 34 Z" fill="#F6B9C3" stroke="none"/>
+    <path d="M128 44 L130 22 L110 34 Z" fill="#F6B9C3" stroke="none"/>
+    <path d="M28 80 C22 48 50 26 85 26 C120 26 148 48 142 80 C150 84 146 94 138 94 C130 114 110 122 85 122 C60 122 40 114 32 94 C24 94 20 84 28 80Z" fill="#FFFDF8"/>
+    <path d="M104 30 C120 30 136 40 140 58 C126 60 110 50 104 30Z" fill="#B9B2AC" stroke="none"/>
+    <path d="M58 76 q8 -8 16 0 M96 76 q8 -8 16 0" fill="none" stroke-width="3.2"/>
+    <path d="M80 86 h10 l-5 6 z" fill="#F08A9C" stroke-width="2"/>
+    <path d="M85 92 v3 M79 97 q3 3 6 0 q3 3 6 0" fill="none" stroke-width="2.4"/>
+    <ellipse cx="50" cy="92" rx="9" ry="5.5" fill="#F59A8C" opacity=".5" stroke="none"/>
+    <ellipse cx="120" cy="92" rx="9" ry="5.5" fill="#F59A8C" opacity=".5" stroke="none"/>
+    <path d="M34 86 h-14 M36 94 l-13 4 M136 86 h14 M134 94 l13 4" fill="none" stroke-width="2"/>
+    <path d="M50 114 Q85 130 120 114 L118 123 Q85 139 52 123 Z" fill="#A8CBE2"/>
+    <circle cx="85" cy="134" r="7" fill="#F9D878"/>
+    <ellipse cx="68" cy="176" rx="13" ry="7.5" fill="#FFFDF8"/>
+    <ellipse cx="102" cy="176" rx="13" ry="7.5" fill="#FFFDF8"/>
+  </g>
+
+  <!-- floating heart -->
+  <path d="M640 62 c-7 -10 6 -18 12 -8 c6 -10 19 -2 12 8 l-12 12z" fill="#CF4636" stroke="#5A3328" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M600 40 l3 6 6 1 -4.5 4 1 6 -5.5 -3 -5.5 3 1 -6 -4.5 -4 6 -1z" fill="#F9D878" stroke="#5A3328" stroke-width="1.8" stroke-linejoin="round"/>
+</svg>
+</div>
+<div class="awning" aria-hidden="true"></div>
+
+<section id="make">
+  <div class="wrap">
+    <div class="head">
+      <h2 data-i18n="make.title">What we make</h2>
+      <p data-i18n="make.lede">Everything starts from your pet. Pick a piece, send a few photos, and we make it by hand.</p>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <div class="tile" style="background:var(--blue)">
+          <span class="chip" data-i18n="p1.time">2–4 weeks</span>
+          <svg viewBox="0 0 100 90" aria-hidden="true"><g stroke="#4A2722" stroke-width="2.5" stroke-linejoin="round"><ellipse cx="50" cy="64" rx="32" ry="20" fill="#E6B474"/><circle cx="50" cy="38" r="24" fill="#F2C88E"/><path d="M28 24 q-10 14 -2 28 q8 -4 6 -18z M72 24 q10 14 2 28 q-8 -4 -6 -18z" fill="#C98E52"/><ellipse cx="50" cy="46" rx="9" ry="7" fill="#FFF1DC"/></g><circle cx="42" cy="35" r="2.6" fill="#4A2722"/><circle cx="58" cy="35" r="2.6" fill="#4A2722"/><ellipse cx="50" cy="43" rx="3.6" ry="2.6" fill="#4A2722"/></svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title"><h3 data-i18n="p1.name">Felt mini</h3><span class="price" data-i18n="p1.price">from $85</span></div>
+          <p data-i18n="p1.desc">A little wool version of your pet, needle-felted from photos. Their own fur can go on top.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="tile" style="background:var(--red)">
+          <span class="chip hot" data-i18n="p2.time">Same day*</span>
+          <svg viewBox="0 0 100 90" aria-hidden="true"><g stroke="#4A2722" stroke-width="2.5"><circle cx="50" cy="46" r="31" fill="#FFF9F0"/><circle cx="50" cy="46" r="21" fill="#F2C88E"/><path d="M33 34 q-6 10 0 18 q6 -2 4 -12z M67 34 q6 10 0 18 q-6 -2 -4 -12z" fill="#C98E52" stroke-linejoin="round"/></g><circle cx="44" cy="43" r="2.4" fill="#4A2722"/><circle cx="56" cy="43" r="2.4" fill="#4A2722"/><ellipse cx="50" cy="50" rx="3.5" ry="2.5" fill="#4A2722"/></svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title"><h3 data-i18n="p2.name">Felt brooch &amp; keyring</h3><span class="price" data-i18n="p2.price">from $45</span></div>
+          <p data-i18n="p2.desc">Your pet's face in felt, small enough to wear. On quiet days we can make one while you wait.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="tile" style="background:var(--pink)">
+          <span class="chip" data-i18n="p3.time">1–2 weeks</span>
+          <svg viewBox="0 0 100 90" aria-hidden="true"><g stroke="#4A2722" stroke-width="2.5" fill="none"><path d="M30 4 Q50 24 70 4"/></g><g stroke="#4A2722" stroke-width="2.5"><circle cx="50" cy="20" r="4" fill="#F9D878"/><path d="M50 24 C32 24 24 40 28 54 C32 70 46 80 50 84 C54 80 68 70 72 54 C76 40 68 24 50 24z" fill="#E4F0F8"/></g><path d="M40 44 q6 10 2 22 M50 38 q-4 16 4 28 M60 44 q-6 12 0 20" fill="none" stroke="#C98E52" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title"><h3 data-i18n="p3.name">Fur keepsake charm</h3><span class="price" data-i18n="p3.price">from $35</span></div>
+          <p data-i18n="p3.desc">A pendant or keyring that holds a little of their fur. For pets still with you, and for ones you miss.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="tile" style="background:var(--yellow)">
+          <span class="chip" data-i18n="p4.time">1–2 weeks</span>
+          <svg viewBox="0 0 100 90" aria-hidden="true"><g stroke="#4A2722" stroke-width="2.5" stroke-linejoin="round"><path d="M22 18 q28 -10 56 0 q8 28 0 56 q-28 10 -56 0 q-8 -28 0 -56z" fill="#FFF9F0" transform="rotate(-5 50 46)"/><path d="M38 34 l-3 -13 11 7z M62 34 l3 -13 -11 7z" fill="#C9C2BA"/><circle cx="50" cy="45" r="16" fill="#C9C2BA"/></g><circle cx="44" cy="43" r="2.3" fill="#4A2722"/><circle cx="56" cy="43" r="2.3" fill="#4A2722"/><path d="M47 49 l3 2 3 -2" fill="none" stroke="#4A2722" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title"><h3 data-i18n="p4.name">Drawn portrait goods</h3><span class="price" data-i18n="p4.price">from $15</span></div>
+          <p data-i18n="p4.desc">We draw your pet once, then put the drawing on stickers, an acrylic keyring or a name tag.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="tile" style="background:var(--blue)">
+          <span class="chip" data-i18n="p5.time">1 week</span>
+          <svg viewBox="0 0 100 90" aria-hidden="true"><path d="M12 22 L88 22 L50 78 Z" fill="url(#ging)" stroke="#4A2722" stroke-width="2.5" stroke-linejoin="round"/><path d="M10 22 h80" stroke="#4A2722" stroke-width="6" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title"><h3 data-i18n="p5.name">Bandanas, S to XL</h3><span class="price" data-i18n="p5.price">from $22</span></div>
+          <p data-i18n="p5.desc">Cotton gingham, cut to your dog's neck. Big dogs very welcome. A matching scrunchie for you on request.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="tile" style="background:var(--red)">
+          <span class="chip hot" data-i18n="p6.time">Pre-order</span>
+          <svg viewBox="0 0 100 90" aria-hidden="true"><path d="M50 2 v10" stroke="#FFF9F0" stroke-width="2.5"/><g stroke="#4A2722" stroke-width="2.5"><rect x="42" y="10" width="16" height="9" rx="3" fill="#F9D878"/><circle cx="50" cy="52" r="32" fill="#A8CBE2"/><circle cx="50" cy="52" r="19" fill="#FFF1DC"/></g><circle cx="44" cy="49" r="2.4" fill="#4A2722"/><circle cx="56" cy="49" r="2.4" fill="#4A2722"/><ellipse cx="50" cy="56" rx="3.6" ry="2.6" fill="#4A2722"/><g fill="#FFF9F0"><circle cx="26" cy="40" r="2.5"/><circle cx="74" cy="40" r="2.5"/><circle cx="30" cy="70" r="2.5"/><circle cx="70" cy="70" r="2.5"/></g></svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title"><h3 data-i18n="p6.name">Christmas ornament</h3><span class="price" data-i18n="p6.price">from $30</span></div>
+          <p data-i18n="p6.desc">Your pet as a felt or drawn tree ornament. Order by our last market before Christmas.</p>
+        </div>
+      </article>
+    </div>
+    <p class="fine" data-i18n="make.note">*Same-day pieces depend on how busy the stall is. Everything else is made after you order, ready at our next market or posted to you.</p>
+  </div>
+</section>
+
+<section id="fur" style="padding-top:20px;">
+  <div class="wrap fur-grid">
+    <div class="collage">
+      <svg class="main" viewBox="0 0 400 360" role="img" aria-label="An envelope with a tuft of fur, labelled with a pet's name, beside a felt charm">
+        <g transform="rotate(-6 200 200)" stroke="#4A2722" stroke-width="2.5" stroke-linejoin="round">
+          <rect x="60" y="120" width="230" height="160" rx="10" fill="#FFF9F0"/>
+          <path d="M60 130 L175 214 L290 130" fill="none"/>
+          <path d="M128 118 q12 -54 40 -40 q18 -30 40 0 q28 -8 22 36" fill="#E6B474"/>
+          <path d="M150 104 q8 -20 18 -10 M186 98 q8 -18 18 -6" fill="none" stroke="#C98E52" stroke-linecap="round"/>
+          <rect x="86" y="236" width="104" height="30" rx="4" fill="#F9D878"/>
+        </g>
+        <text x="96" y="266" transform="rotate(-6 200 200)" font-family="Caveat, cursive" font-size="24" fill="#4A2722">Mochi ♡</text>
+        <g transform="rotate(10 320 250)" stroke="#4A2722" stroke-width="2.5">
+          <path d="M320 186 v14" fill="none"/>
+          <path d="M320 200 C298 200 290 220 294 236 C298 254 314 266 320 272 C326 266 342 254 346 236 C350 220 342 200 320 200z" fill="#E4F0F8"/>
+          <path d="M310 222 q6 10 2 22 M322 216 q-4 16 4 28" fill="none" stroke="#C98E52" stroke-linecap="round"/>
+        </g>
+        <g fill="#CF4636"><path d="M44 52 l7 14 15 2 -11 10 3 15 -14 -8 -14 8 3 -15 -11 -10 15 -2z"/><path d="M356 70 l4 9 10 1 -7 7 2 10 -9 -5 -9 5 2 -10 -7 -7 10 -1z"/></g>
+        <path d="M250 70 q30 -10 44 18" fill="none" stroke="#4A2722" stroke-width="2" stroke-linecap="round"/>
+        <path d="M288 84 l6 5 2 -8" fill="none" stroke="#4A2722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M70 320 q-24 -18 -6 -42" fill="none" stroke="#4A2722" stroke-width="2" stroke-linecap="round"/>
+        <path d="M60 284 l4 -7 4 7" fill="none" stroke="#4A2722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="label" style="left:58%; top:6%;" data-i18n="fur.l1">their fur</span>
+      <span class="label" style="left:2%; top:88%;" data-i18n="fur.l2">name on it</span>
+      <span class="label" style="left:72%; top:80%;" data-i18n="fur.l3">sealed in a charm</span>
+    </div>
+    <div>
+      <h2 data-i18n="fur.title">Bring a little of their fur</h2>
+      <p data-i18n="fur.lede">Fur is what makes a piece theirs. We felt it into the top coat of a mini, or seal it inside a charm.</p>
+      <div class="acc">
+        <details open><summary data-i18n="a1.q">How to collect fur</summary><p data-i18n="a1.a">Brush your pet and keep the loose fur. A small handful is enough for a charm; a mini needs a bit more. Make sure it's clean and fully dry, then put it in a zip bag or envelope with your pet's name.</p></details>
+        <details><summary data-i18n="a2.q">No fur?</summary><p data-i18n="a2.a">That's fine. We match their colours with wool instead.</p></details>
+        <details><summary data-i18n="a3.q">Deposit and pickup</summary><p data-i18n="a3.a">We take a 50% deposit to start. Pick up at our next market, or we post it to you.</p></details>
+        <details><summary data-i18n="a4.q">For a pet who has passed</summary><p data-i18n="a4.a">Just tell us in your notes. We'll take extra care with the photos and fur, and we won't rush you.</p></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:10px;">
+  <div class="wrap">
+    <div class="gift">
+      <div class="gift-copy">
+        <h2 data-i18n="gift.title">Christmas is for them too</h2>
+        <p data-i18n="gift.body">Order a felt or drawn ornament before our last market before Christmas. Buying for a friend? Get a gift card and let them choose their own piece.</p>
+        <div class="btns"><a class="btn solid" href="#order" data-i18n="gift.cta">Pre-order an ornament</a></div>
+      </div>
+      <div class="gift-art">
+        <svg viewBox="0 0 360 260" role="img" aria-label="A Soft Spot gift card tucked into a red envelope">
+          <g transform="rotate(-8 150 130)" stroke="#4A2722" stroke-width="2.5" stroke-linejoin="round">
+            <rect x="60" y="40" width="170" height="190" rx="6" fill="#CF4636"/>
+            <path d="M60 40 h170 v70 h-170z" fill="#F6B9C3"/>
+            <path d="M150 30 h30 v16 h-30z" fill="#F6B9C3"/>
+          </g>
+          <g transform="rotate(-10 230 180)" stroke="#4A2722" stroke-width="2.5">
+            <rect x="160" y="134" width="170" height="96" rx="8" fill="#FFF9F0"/>
+          </g>
+          <text x="186" y="196" transform="rotate(-10 230 180)" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="600" font-size="28" fill="#CF4636">Gift card</text>
+          <g transform="rotate(-10 230 180)">
+            <path d="M180 160 c-6 -8 4 -14 8 -6 c4 -8 14 -2 8 6 l-8 8z" fill="#A8CBE2"/>
+            <circle cx="310" cy="152" r="6" fill="#F9D878"/>
+            <path d="M298 212 c-6 -8 4 -14 8 -6 c4 -8 14 -2 8 6 l-8 8z" fill="#CF4636"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="order">
+  <div class="wrap">
+    <div class="head">
+      <h2 data-i18n="order.title">Start your order</h2>
+      <p data-i18n="order.lede">Fill this in, copy it, and send it to us with your photos. We'll reply with a quote and a pickup date.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><b>1</b><h3 data-i18n="s1.t">Pick a piece</h3><p data-i18n="s1.d">From the list above, or see them at the stall.</p></div>
+      <div class="step"><b>2</b><h3 data-i18n="s2.t">Send photos</h3><p data-i18n="s2.d">3–5 clear photos, plus fur if you'd like it in.</p></div>
+      <div class="step"><b>3</b><h3 data-i18n="s3.t">Pay a deposit</h3><p data-i18n="s3.d">50% to start. Drawn pieces get a sketch first.</p></div>
+      <div class="step"><b>4</b><h3 data-i18n="s4.t">Pick it up</h3><p data-i18n="s4.d">At our next market, or by post.</p></div>
+    </div>
+    <div class="order">
+      <form class="panel" id="orderForm" novalidate>
+        <div class="field">
+          <label for="product" data-i18n="f.product">What would you like?</label>
+          <select id="product">
+            <option value="p1" data-i18n="opt.p1">Felt mini · from $85</option>
+            <option value="p2" data-i18n="opt.p2">Felt brooch &amp; keyring · from $45</option>
+            <option value="p3" data-i18n="opt.p3">Fur keepsake charm · from $35</option>
+            <option value="p4" data-i18n="opt.p4">Drawn portrait goods · from $15</option>
+            <option value="p5" data-i18n="opt.p5">Bandana · from $22</option>
+            <option value="p6" data-i18n="opt.p6">Christmas ornament · from $30</option>
+          </select>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="petName" data-i18n="f.petName">Pet's name</label>
+            <input id="petName" type="text" autocomplete="off" data-i18n-ph="ph.petName" placeholder="e.g. Mochi">
+          </div>
+          <div class="field">
+            <label for="petType" data-i18n="f.petType">Breed or description</label>
+            <input id="petType" type="text" data-i18n-ph="ph.petType" placeholder="e.g. golden retriever">
+          </div>
+        </div>
+        <div class="field hidden" id="sizeField">
+          <label for="size" data-i18n="f.size">Bandana size</label>
+          <select id="size">
+            <option value="S" data-i18n="sz.S">S · neck up to 30 cm</option>
+            <option value="M" data-i18n="sz.M">M · neck 30–40 cm</option>
+            <option value="L" data-i18n="sz.L">L · neck 40–50 cm</option>
+            <option value="XL" data-i18n="sz.XL">XL · neck 50 cm and up</option>
+          </select>
+        </div>
+        <label class="check" for="withFur"><input type="checkbox" id="withFur"> <span data-i18n="f.fur">Include their fur</span></label>
+        <div class="row2">
+          <div class="field">
+            <label for="pickup" data-i18n="f.pickup">How would you like it?</label>
+            <select id="pickup">
+              <option value="market" data-i18n="pk.market">Pick up at the next market</option>
+              <option value="post" data-i18n="pk.post">Post it to me</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="yourName" data-i18n="f.yourName">Your name</label>
+            <input id="yourName" type="text" autocomplete="name">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label for="notes" data-i18n="f.notes">Anything else?</label>
+          <textarea id="notes" data-i18n-ph="ph.notes" placeholder="Colours, name tag wording, a gift for someone, a pet who has passed…"></textarea>
+        </div>
+      </form>
+      <div class="panel">
+        <h3 style="color:var(--ink); margin-bottom:12px;" data-i18n="o.title">Your order</h3>
+        <div class="preview" id="preview" aria-live="polite"></div>
+        <div class="btns" style="margin-top:16px;">
+          <button class="btn solid" type="button" id="copyBtn" data-i18n="o.copy">Copy my order</button>
+          <span id="igSlot"></span>
+        </div>
+        <div class="status" id="status" role="status"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="market" style="padding-top:10px;">
+  <div class="wrap duo">
+    <div class="ticket">
+      <div class="stripe"></div>
+      <div class="in">
+        <h2 style="font-size:2rem;" data-i18n="m.title">Find us at the market</h2>
+        <dl>
+          <dt data-i18n="m.where">Where</dt><dd>Box Hill</dd>
+          <dt data-i18n="m.when">When</dt><dd data-i18n="m.whenV">Dates coming soon</dd>
+          <dt data-i18n="m.bring">Bring</dt><dd data-i18n="m.bringV">Photos of your pet, and fur if you have it</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="ticket">
+      <div class="stripe red"></div>
+      <div class="in">
+        <h2 style="font-size:2rem;" data-i18n="ab.title">Two friends, one stall</h2>
+        <p data-i18n="ab.body">We're two makers in Melbourne. One of us draws, the other works with wool. Everyone we know has a pet they'd do anything for, so we make things that keep a bit of them close.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot-grid">
+    <div class="word">Soft Spot</div>
+    <div>
+      <h4 data-i18n="ft.make">Make</h4>
+      <ul>
+        <li><a href="#make" data-i18n="p1.name">Felt mini</a></li>
+        <li><a href="#make" data-i18n="p3.name">Fur keepsake charm</a></li>
+        <li><a href="#make" data-i18n="p4.name">Drawn portrait goods</a></li>
+        <li><a href="#make" data-i18n="p5.name">Bandanas, S to XL</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-i18n="ft.order">Order</h4>
+      <ul>
+        <li><a href="#order" data-i18n="ft.custom">Custom order</a></li>
+        <li><a href="#fur" data-i18n="a1.q">How to collect fur</a></li>
+        <li><a href="#market" data-i18n="ft.pickup">Market pickup</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-i18n="ft.hi">Say hi</h4>
+      <ul>
+        <li id="igFooter" data-i18n="ig.soon">Instagram coming soon</li>
+        <li data-i18n="ft.where">Handmade in Melbourne</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom"><span>© 2026 Soft Spot</span><span data-i18n="ft.made">Made to order, one at a time</span></div>
+</footer>
+
+<script>
+(function () {
+  // Put your Instagram handle here (without @) once it's registered.
+  var IG_HANDLE = "";
+
+  var T = {
+    en: {
+      "tick1": "Christmas pre-orders now open", "tick2": "Made to order in Melbourne", "tick3": "Bring a little of their fur", "tick4": "Dogs, cats and every size in between",
+      "nav.make": "What we make", "nav.fur": "Their fur", "nav.order": "Order", "nav.market": "Find us",
+      "hero.title": "Little things, made with a bit of <em>them.</em>",
+      "hero.lede": "Felted, drawn and stitched by hand in Melbourne, from your pet's photos and a little of their fur.",
+      "hero.cta1": "Start a custom order", "hero.cta2": "Find us at the market",
+      "make.title": "What we make", "make.lede": "Everything starts from your pet. Pick a piece, send a few photos, and we make it by hand.",
+      "make.note": "*Same-day pieces depend on how busy the stall is. Everything else is made after you order, ready at our next market or posted to you.",
+      "p1.name": "Felt mini", "p1.price": "from $85", "p1.time": "2–4 weeks", "p1.desc": "A little wool version of your pet, needle-felted from photos. Their own fur can go on top.",
+      "p2.name": "Felt brooch & keyring", "p2.price": "from $45", "p2.time": "Same day*", "p2.desc": "Your pet's face in felt, small enough to wear. On quiet days we can make one while you wait.",
+      "p3.name": "Fur keepsake charm", "p3.price": "from $35", "p3.time": "1–2 weeks", "p3.desc": "A pendant or keyring that holds a little of their fur. For pets still with you, and for ones you miss.",
+      "p4.name": "Drawn portrait goods", "p4.price": "from $15", "p4.time": "1–2 weeks", "p4.desc": "We draw your pet once, then put the drawing on stickers, an acrylic keyring or a name tag.",
+      "p5.name": "Bandanas, S to XL", "p5.price": "from $22", "p5.time": "1 week", "p5.desc": "Cotton gingham, cut to your dog's neck. Big dogs very welcome. A matching scrunchie for you on request.",
+      "p6.name": "Christmas ornament", "p6.price": "from $30", "p6.time": "Pre-order", "p6.desc": "Your pet as a felt or drawn tree ornament. Order by our last market before Christmas.",
+      "fur.l1": "their fur", "fur.l2": "name on it", "fur.l3": "sealed in a charm",
+      "fur.title": "Bring a little of their fur", "fur.lede": "Fur is what makes a piece theirs. We felt it into the top coat of a mini, or seal it inside a charm.",
+      "a1.q": "How to collect fur", "a1.a": "Brush your pet and keep the loose fur. A small handful is enough for a charm; a mini needs a bit more. Make sure it's clean and fully dry, then put it in a zip bag or envelope with your pet's name.",
+      "a2.q": "No fur?", "a2.a": "That's fine. We match their colours with wool instead.",
+      "a3.q": "Deposit and pickup", "a3.a": "We take a 50% deposit to start. Pick up at our next market, or we post it to you.",
+      "a4.q": "For a pet who has passed", "a4.a": "Just tell us in your notes. We'll take extra care with the photos and fur, and we won't rush you.",
+      "gift.title": "Christmas is for them too", "gift.body": "Order a felt or drawn ornament before our last market before Christmas. Buying for a friend? Get a gift card and let them choose their own piece.", "gift.cta": "Pre-order an ornament",
+      "order.title": "Start your order", "order.lede": "Fill this in, copy it, and send it to us with your photos. We'll reply with a quote and a pickup date.",
+      "s1.t": "Pick a piece", "s1.d": "From the list above, or see them at the stall.", "s2.t": "Send photos", "s2.d": "3–5 clear photos, plus fur if you'd like it in.", "s3.t": "Pay a deposit", "s3.d": "50% to start. Drawn pieces get a sketch first.", "s4.t": "Pick it up", "s4.d": "At our next market, or by post.",
+      "f.product": "What would you like?", "f.petName": "Pet's name", "f.petType": "Breed or description", "f.size": "Bandana size", "f.fur": "Include their fur", "f.pickup": "How would you like it?", "f.yourName": "Your name", "f.notes": "Anything else?",
+      "ph.petName": "e.g. Mochi", "ph.petType": "e.g. golden retriever", "ph.notes": "Colours, name tag wording, a gift for someone, a pet who has passed…",
+      "opt.p1": "Felt mini · from $85", "opt.p2": "Felt brooch & keyring · from $45", "opt.p3": "Fur keepsake charm · from $35", "opt.p4": "Drawn portrait goods · from $15", "opt.p5": "Bandana · from $22", "opt.p6": "Christmas ornament · from $30",
+      "sz.S": "S · neck up to 30 cm", "sz.M": "M · neck 30–40 cm", "sz.L": "L · neck 40–50 cm", "sz.XL": "XL · neck 50 cm and up",
+      "pk.market": "Pick up at the next market", "pk.post": "Post it to me",
+      "o.title": "Your order", "o.copy": "Copy my order", "o.copied": "Copied. Paste it into a message to us with your photos.", "o.select": "Your order is selected. Press Ctrl/Cmd + C to copy it.",
+      "ig.soon": "Instagram coming soon", "ig.msg": "Message us on Instagram",
+      "m.title": "Find us at the market", "m.where": "Where", "m.when": "When", "m.whenV": "Dates coming soon", "m.bring": "Bring", "m.bringV": "Photos of your pet, and fur if you have it",
+      "ab.title": "Two friends, one stall", "ab.body": "We're two makers in Melbourne. One of us draws, the other works with wool. Everyone we know has a pet they'd do anything for, so we make things that keep a bit of them close.",
+      "ft.make": "Make", "ft.order": "Order", "ft.custom": "Custom order", "ft.pickup": "Market pickup", "ft.hi": "Say hi", "ft.where": "Handmade in Melbourne", "ft.made": "Made to order, one at a time",
+      "msg.hi": "Hi Soft Spot! I'd like to order:", "msg.item": "Item", "msg.size": "Size", "msg.pet": "Pet", "msg.fur": "Include fur", "msg.yes": "Yes", "msg.no": "No", "msg.pickup": "Pickup", "msg.notes": "Notes", "msg.from": "From", "msg.photos": "I'll send 3–5 photos of my pet with this message.", "msg.nameph": "(pet's name)", "msg.youph": "(your name)",
+      "lang.label": "中文"
+    },
+    zh: {
+      "tick1": "圣诞预订开放中", "tick2": "墨尔本手作 · 下单后制作", "tick3": "带一小撮 TA 的毛来", "tick4": "猫猫狗狗，大小都有",
+      "nav.make": "我们做的", "nav.fur": "TA 的毛", "nav.order": "定制", "nav.market": "市集",
+      "hero.title": "把你家那只，<em>做成能一直带在身边的小东西</em>",
+      "hero.lede": "在墨尔本一件件手作。一张照片、一小撮毛，我们把 TA 戳成毛毡、画成插画、缝进小领巾。",
+      "hero.cta1": "开始定制", "hero.cta2": "去市集找我们",
+      "make.title": "我们做的东西", "make.lede": "每一件都从你家宠物开始。选好款式，发几张照片，剩下的交给我们。",
+      "make.note": "*当天可取要看摊位忙不忙。其他都是下单后制作，下一场市集取货，或者寄给你。",
+      "p1.name": "毛毡小像", "p1.price": "$85 起", "p1.time": "2–4 周", "p1.desc": "照着照片一针一针戳出来的迷你版 TA，表面可以用 TA 自己的毛。",
+      "p2.name": "毛毡胸针 · 钥匙扣", "p2.price": "$45 起", "p2.time": "当天可取*", "p2.desc": "小小一个 TA 的脸，别在包上刚刚好。摊位不忙的时候可以现场等。",
+      "p3.name": "毛发纪念吊坠", "p3.price": "$35 起", "p3.time": "1–2 周", "p3.desc": "把一小撮毛封进吊坠或钥匙扣。给还在身边的 TA，也给已经离开的 TA。",
+      "p4.name": "宠物插画周边", "p4.price": "$15 起", "p4.time": "1–2 周", "p4.desc": "先给 TA 画一张专属插画，再做成贴纸、亚克力钥匙扣或名牌。",
+      "p5.name": "格纹领巾 S–XL", "p5.price": "$22 起", "p5.time": "1 周", "p5.desc": "纯棉格纹，按脖围裁，大狗也有合适的尺码。还可以加一个主人同款发圈。",
+      "p6.name": "圣诞挂饰", "p6.price": "$30 起", "p6.time": "预订中", "p6.desc": "毛毡或插画版的 TA，挂在圣诞树上。圣诞前最后一场市集截单。",
+      "fur.l1": "TA 的毛", "fur.l2": "写上名字", "fur.l3": "封进吊坠",
+      "fur.title": "带一小撮 TA 的毛来", "fur.lede": "有了 TA 的毛，这件东西才真正属于 TA。我们会把毛戳进毛毡表层，或者封进吊坠里。",
+      "a1.q": "怎么收集毛", "a1.a": "给 TA 梳毛时，把掉下来的毛留着。做吊坠一小撮就够，做小像要多一点。洗干净、完全晾干，装进密封袋或信封，写上 TA 的名字。",
+      "a2.q": "没有毛也可以吗？", "a2.a": "可以，我们用羊毛调出接近的毛色。",
+      "a3.q": "定金和取货", "a3.a": "先付 50% 定金开工。下一场市集取货，或者寄给你。",
+      "a4.q": "给已经离开的 TA", "a4.a": "在备注里告诉我们就好。照片和毛我们会格外小心，也不会催你。",
+      "gift.title": "圣诞节，也给 TA 准备一份", "gift.body": "在圣诞前最后一场市集之前下单，毛毡或插画挂饰都来得及。想送朋友？买一张定制礼品卡，让 TA 自己挑。", "gift.cta": "预订圣诞挂饰",
+      "order.title": "开始定制", "order.lede": "填好之后复制，连同照片一起发给我们。我们会回复报价和取货时间。",
+      "s1.t": "选款式", "s1.d": "在上面挑，或者来摊位看实物。", "s2.t": "发照片", "s2.d": "3–5 张清楚的照片，想用毛的话一起带来。", "s3.t": "付定金", "s3.d": "付一半开工。插画会先给你看草稿。", "s4.t": "取货", "s4.d": "下一场市集取，或者寄到家。",
+      "f.product": "想做什么？", "f.petName": "宠物名字", "f.petType": "品种或特征", "f.size": "领巾尺码", "f.fur": "用 TA 的毛", "f.pickup": "怎么取货？", "f.yourName": "你的名字", "f.notes": "还有什么想说的？",
+      "ph.petName": "比如：麻薯", "ph.petType": "比如：金毛、白色长毛猫", "ph.notes": "颜色、名牌上的字、送人用、给已经离开的 TA……",
+      "opt.p1": "毛毡小像 · $85 起", "opt.p2": "毛毡胸针 · 钥匙扣 · $45 起", "opt.p3": "毛发纪念吊坠 · $35 起", "opt.p4": "宠物插画周边 · $15 起", "opt.p5": "格纹领巾 · $22 起", "opt.p6": "圣诞挂饰 · $30 起",
+      "sz.S": "S · 脖围 30cm 以内", "sz.M": "M · 脖围 30–40cm", "sz.L": "L · 脖围 40–50cm", "sz.XL": "XL · 脖围 50cm 以上",
+      "pk.market": "下一场市集取", "pk.post": "寄给我",
+      "o.title": "你的订单", "o.copy": "复制订单", "o.copied": "已复制，粘贴到私信里，连同照片一起发给我们就好。", "o.select": "订单已选中，按 Ctrl/Cmd + C 复制。",
+      "ig.soon": "Instagram 即将开通", "ig.msg": "在 Instagram 私信我们",
+      "m.title": "来市集找我们", "m.where": "地点", "m.when": "时间", "m.whenV": "日期即将公布", "m.bring": "带上", "m.bringV": "宠物照片，有毛的话也带上",
+      "ab.title": "两个人，一个摊位", "ab.body": "我们是住在墨尔本的两个手作人，一个画画，一个玩毛线和毛毡。身边每个朋友都有一只愿意为它做任何事的宠物，所以我们想做一些能把 TA 留在身边的小东西。",
+      "ft.make": "产品", "ft.order": "定制", "ft.custom": "定制下单", "ft.pickup": "市集取货", "ft.hi": "联系我们", "ft.where": "墨尔本手作", "ft.made": "下单后制作，一件一件做",
+      "msg.hi": "你好 Soft Spot！我想定制：", "msg.item": "款式", "msg.size": "尺码", "msg.pet": "宠物", "msg.fur": "用 TA 的毛", "msg.yes": "是", "msg.no": "否", "msg.pickup": "取货", "msg.notes": "备注", "msg.from": "我是", "msg.photos": "照片我会一起发过来。", "msg.nameph": "（宠物名字）", "msg.youph": "（你的名字）",
+      "lang.label": "EN"
+    }
+  };
+
+  var lang = "en";
+  try { var saved = localStorage.getItem("softspot-lang"); if (saved === "zh" || saved === "en") lang = saved; } catch (e) {}
+
+  var $ = function (id) { return document.getElementById(id); };
+  function t(k) { return (T[lang] && T[lang][k]) || T.en[k] || ""; }
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-i18n-html]").forEach(function (el) { el.innerHTML = t(el.getAttribute("data-i18n-html")); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $("langLabel").textContent = t("lang.label");
+    renderIG();
+    render();
+    $("status").textContent = "";
+  }
+
+  function renderIG() {
+    if (IG_HANDLE) {
+      var url = "https://instagram.com/" + IG_HANDLE;
+      $("igSlot").innerHTML = '<a class="btn line" href="' + url + '">' + t("ig.msg") + '</a>';
+      $("igFooter").innerHTML = '<a href="' + url + '">@' + IG_HANDLE + '</a>';
+    } else {
+      $("igSlot").innerHTML = '<span class="ig-soon">' + t("ig.soon") + '</span>';
+    }
+  }
+
+  function buildOrder() {
+    var p = $("product").value;
+    var isBandana = p === "p5";
+    $("sizeField").classList.toggle("hidden", !isBandana);
+    var opt = $("product").options[$("product").selectedIndex].textContent;
+    var name = $("petName").value.trim() || t("msg.nameph");
+    var type = $("petType").value.trim();
+    var L = [t("msg.hi"), "", "• " + t("msg.item") + ": " + opt];
+    if (isBandana) L.push("• " + t("msg.size") + ": " + $("size").options[$("size").selectedIndex].textContent);
+    L.push("• " + t("msg.pet") + ": " + name + (type ? " (" + type + ")" : ""));
+    L.push("• " + t("msg.fur") + ": " + ($("withFur").checked ? t("msg.yes") : t("msg.no")));
+    L.push("• " + t("msg.pickup") + ": " + $("pickup").options[$("pickup").selectedIndex].textContent);
+    if ($("notes").value.trim()) L.push("• " + t("msg.notes") + ": " + $("notes").value.trim());
+    L.push("", t("msg.from") + ": " + ($("yourName").value.trim() || t("msg.youph")), t("msg.photos"));
+    return L.join("\n");
+  }
+  function render() { $("preview").textContent = buildOrder(); }
+
+  ["product", "petName", "petType", "size", "withFur", "pickup", "notes", "yourName"].forEach(function (id) {
+    $(id).addEventListener("input", render);
+    $(id).addEventListener("change", render);
+  });
+  $("orderForm").addEventListener("submit", function (e) { e.preventDefault(); });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = buildOrder();
+    var done = function () { $("status").textContent = t("o.copied"); };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents($("preview"));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      $("status").textContent = t("o.select");
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  });
+
+  $("langBtn").addEventListener("click", function () {
+    lang = lang === "en" ? "zh" : "en";
+    try { localStorage.setItem("softspot-lang", lang); } catch (e) {}
+    applyLang();
+  });
+
+  // Highlight the nav pill for the section in view
+  var links = Array.prototype.slice.call(document.querySelectorAll(".pillnav a"));
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (a) { a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id); });
+        }
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    ["make", "fur", "order", "market"].forEach(function (id) { io.observe($(id)); });
+  }
+
+  applyLang();
+})();
+</script>
+</body>
+</html>
